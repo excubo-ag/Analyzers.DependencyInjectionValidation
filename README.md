@@ -36,7 +36,7 @@ namespace Foo
 }
 ```
 
-If you happen to not have any annotations, you will get the following error message
+As long as you haven't added any annotations, you will get the following error message
 
 ```cs
 namespace Foo
