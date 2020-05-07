@@ -2,7 +2,6 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
-using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
@@ -28,13 +27,12 @@ namespace DependencyInjectionValidation
         private static readonly LocalizableString TooManyServiceExtensionsDescription = new LocalizableResourceString(nameof(Resources.TooManyServiceExtensionsDescription), Resources.ResourceManager, typeof(Resources));
         private const string Category = "Dependency Injection";
 
-        private static readonly DiagnosticDescriptor TooManyServiceExtensionsRule = new DiagnosticDescriptor(DiagnosticId, TooManyServiceExtensionsTitle, TooManyServiceExtensionsMessageFormat, Category, DiagnosticSeverity.Warning, isEnabledByDefault: true, description: TooManyServiceExtensionsDescription);
-        private static readonly DiagnosticDescriptor MissingServiceExtensionRule = new DiagnosticDescriptor(DiagnosticId, MissingServiceExtensionTitle, MissingServiceExtensionMessageFormat, Category, DiagnosticSeverity.Warning, isEnabledByDefault: true, description: MissingServiceExtensionDescription);
-        private static readonly DiagnosticDescriptor MissingDependencyRule = new DiagnosticDescriptor(DiagnosticId, MissingDependencyTitle, MissingDependencyMessageFormat, Category, DiagnosticSeverity.Warning, isEnabledByDefault: true, description: MissingDependencyDescription);
-        private static readonly DiagnosticDescriptor MissingDependencyInApplicationRule = new DiagnosticDescriptor(DiagnosticId, MissingDependencyInApplicationTitle, MissingDependencyInApplicationMessageFormat, Category, DiagnosticSeverity.Warning, isEnabledByDefault: true, description: MissingDependencyInApplicationDescription);
-        internal static readonly DiagnosticDescriptor AnalyzerFailureRule = new DiagnosticDescriptor(DiagnosticId, "ANALYZER FAILED", "Message: {0}, Stacktrace: {1}", Category, DiagnosticSeverity.Warning, isEnabledByDefault: true, description: "DESCRIPTION");
+        private static readonly DiagnosticDescriptor TooManyServiceExtensionsRule = new DiagnosticDescriptor("E-DI-01", TooManyServiceExtensionsTitle, TooManyServiceExtensionsMessageFormat, Category, DiagnosticSeverity.Warning, isEnabledByDefault: true, description: TooManyServiceExtensionsDescription);
+        private static readonly DiagnosticDescriptor MissingServiceExtensionRule = new DiagnosticDescriptor("E-DI-02", MissingServiceExtensionTitle, MissingServiceExtensionMessageFormat, Category, DiagnosticSeverity.Warning, isEnabledByDefault: true, description: MissingServiceExtensionDescription);
+        private static readonly DiagnosticDescriptor MissingDependencyRule = new DiagnosticDescriptor("E-DI-03", MissingDependencyTitle, MissingDependencyMessageFormat, Category, DiagnosticSeverity.Warning, isEnabledByDefault: true, description: MissingDependencyDescription);
+        private static readonly DiagnosticDescriptor MissingDependencyInApplicationRule = new DiagnosticDescriptor("E-DI-04", MissingDependencyInApplicationTitle, MissingDependencyInApplicationMessageFormat, Category, DiagnosticSeverity.Warning, isEnabledByDefault: true, description: MissingDependencyInApplicationDescription);
 
-        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get { return ImmutableArray.Create(MissingServiceExtensionRule, MissingDependencyRule, TooManyServiceExtensionsRule, AnalyzerFailureRule, MissingDependencyInApplicationRule); } }
+        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get { return ImmutableArray.Create(MissingServiceExtensionRule, MissingDependencyRule, TooManyServiceExtensionsRule, MissingDependencyInApplicationRule); } }
 
         public override void Initialize(AnalysisContext context)
         {
@@ -44,97 +42,90 @@ namespace DependencyInjectionValidation
         }
         private void CompilationDoneAction(CompilationAnalysisContext context)
         {
-            try
+            var all_interfaces = context
+                .Compilation
+                .SyntaxTrees
+                .SelectMany(syntax_tree => syntax_tree.GetRoot().FindInterfaces())
+                .ToList();
+            #region exit if cancelled
+            if (context.CancellationToken.IsCancellationRequested)
             {
-                var all_interfaces = context
-                    .Compilation
-                    .SyntaxTrees
-                    .SelectMany(syntax_tree => syntax_tree.GetRoot().FindInterfaces())
-                    .ToList();
-                #region exit if cancelled
-                if (context.CancellationToken.IsCancellationRequested)
-                {
-                    return;
-                }
-                #endregion
-                var all_classes = context
-                    .Compilation
-                    .SyntaxTrees
-                    .SelectMany(syntax_tree => syntax_tree.GetRoot().FindClasses())
-                    .Where(c => !c.IsPrivate)
-                    .ToList();
-                #region exit if cancelled
-                if (context.CancellationToken.IsCancellationRequested)
-                {
-                    return;
-                }
-                #endregion
-                var classes_with_dependencies = all_classes
-                    .Select(@class =>
-                    {
-                        foreach (var constructor in @class.Constructors)
-                        {
-                            constructor.FindDependencies(all_interfaces, context.Compilation);
-                        }
-                        @class.FindBases(all_interfaces, context.Compilation);
-                        @class.FindProperties(all_interfaces, context.Compilation);
-                        return @class;
-                    })
-                    .ToList();
-                #region exit if cancelled
-                if (context.CancellationToken.IsCancellationRequested)
-                {
-                    return;
-                }
-                #endregion
-                if (!all_classes.Any())
-                {
-                    return;
-                }
-                var extension_methods = all_classes
-                    .Where(@class => @class.IsStatic)
-                    .SelectMany(@class => (@class.Declaration as ClassDeclarationSyntax)
-                            .FindMethods()
-                            .Where(method => method.ParameterList != null && method.ParameterList.Parameters.Any())
-                            .Where(method => method.ParameterList.Parameters.Any(p => p.Modifiers.Any(m => m.IsKind(SyntaxKind.ThisKeyword)))) // this is an extension method
-                            .Where(method => method.ParameterList.Parameters.First().Type.ToString().EndsWith("IServiceCollection")) // this is a service extension method
-                            .Where(method => method.AttributeLists.Any(list => list.Attributes.Any(a => a.Name.ToString().StartsWith("Exposes")))) // this is a SE that exposes something
-                            .Select(method => new ServiceExtension(@class.FullyQualifiedName, method))
-                    ).ToList();
-                #region exit if cancelled
-                if (context.CancellationToken.IsCancellationRequested)
-                {
-                    return;
-                }
-                #endregion
-                AddHandledTypes(extension_methods, classes_with_dependencies, context.Compilation);
-                #region exit if cancelled
-                if (context.CancellationToken.IsCancellationRequested)
-                {
-                    return;
-                }
-                #endregion
-                var dependency_injection_points = all_classes
-                    .SelectMany(@class => (@class.Declaration as ClassDeclarationSyntax)
-                            .FindMethods()
-                            .Where(method => method.ParameterList != null && method.ParameterList.Parameters.Any())
-                            .Where(method => method.ParameterList.Parameters.First().Type.ToString().EndsWith("IServiceCollection")) // this is a method handling IServiceCollection
-                            .Where(method => method.AttributeLists.Any(list => list.Attributes.Any(a => a.Name.ToString().StartsWith("DependencyInjectionPoint")))) // this is a DIP
-                            .Select(method => new DependencyInjectionPoint(@class.FullyQualifiedName, method)))
-                    .ToList();
-                if (dependency_injection_points.Any())
-                {
-                    // this is an application project. We do not require service extensions from now on
-                    AnalyzeAsApplication(context, extension_methods, classes_with_dependencies, all_interfaces, dependency_injection_points);
-                }
-                else
-                {
-                    AnalyzeAsLibrary(context, extension_methods, classes_with_dependencies, all_interfaces);
-                }
+                return;
             }
-            catch (Exception e)
+            #endregion
+            var all_classes = context
+                .Compilation
+                .SyntaxTrees
+                .SelectMany(syntax_tree => syntax_tree.GetRoot().FindClasses())
+                .Where(c => !c.IsPrivate)
+                .ToList();
+            #region exit if cancelled
+            if (context.CancellationToken.IsCancellationRequested)
             {
-                context.ReportDiagnostic(Diagnostic.Create(AnalyzerFailureRule, null, e.Message, e.StackTrace));
+                return;
+            }
+            #endregion
+            var classes_with_dependencies = all_classes
+                .Select(@class =>
+                {
+                    foreach (var constructor in @class.Constructors)
+                    {
+                        constructor.FindDependencies(all_interfaces, context.Compilation);
+                    }
+                    @class.FindBases(all_interfaces, context.Compilation);
+                    @class.FindProperties(all_interfaces, context.Compilation);
+                    return @class;
+                })
+                .ToList();
+            #region exit if cancelled
+            if (context.CancellationToken.IsCancellationRequested)
+            {
+                return;
+            }
+            #endregion
+            if (!all_classes.Any())
+            {
+                return;
+            }
+            var extension_methods = all_classes
+                .Where(@class => @class.IsStatic)
+                .SelectMany(@class => (@class.Declaration as ClassDeclarationSyntax)
+                        .FindMethods()
+                        .Where(method => method.ParameterList != null && method.ParameterList.Parameters.Any())
+                        .Where(method => method.ParameterList.Parameters.Any(p => p.Modifiers.Any(m => m.IsKind(SyntaxKind.ThisKeyword)))) // this is an extension method
+                        .Where(method => method.ParameterList.Parameters.First().Type.ToString().EndsWith("IServiceCollection")) // this is a service extension method
+                        .Where(method => method.AttributeLists.Any(list => list.Attributes.Any(a => a.Name.ToString().StartsWith("Exposes")))) // this is a SE that exposes something
+                        .Select(method => new ServiceExtension(@class.FullyQualifiedName, method))
+                ).ToList();
+            #region exit if cancelled
+            if (context.CancellationToken.IsCancellationRequested)
+            {
+                return;
+            }
+            #endregion
+            AddHandledTypes(extension_methods, classes_with_dependencies, context.Compilation);
+            #region exit if cancelled
+            if (context.CancellationToken.IsCancellationRequested)
+            {
+                return;
+            }
+            #endregion
+            var dependency_injection_points = all_classes
+                .SelectMany(@class => (@class.Declaration as ClassDeclarationSyntax)
+                        .FindMethods()
+                        .Where(method => method.ParameterList != null && method.ParameterList.Parameters.Any())
+                        .Where(method => method.ParameterList.Parameters.First().Type.ToString().EndsWith("IServiceCollection")) // this is a method handling IServiceCollection
+                        .Where(method => method.AttributeLists.Any(list => list.Attributes.Any(a => a.Name.ToString().StartsWith("DependencyInjectionPoint")))) // this is a DIP
+                        .Select(method => new DependencyInjectionPoint(@class.FullyQualifiedName, method)))
+                .ToList();
+            if (dependency_injection_points.Any())
+            {
+                // this is an application project. We do not require service extensions from now on
+                AnalyzeAsApplication(context, extension_methods, classes_with_dependencies, all_interfaces, dependency_injection_points);
+            }
+            else
+            {
+                AnalyzeAsLibrary(context, extension_methods, classes_with_dependencies, all_interfaces);
             }
         }
 
