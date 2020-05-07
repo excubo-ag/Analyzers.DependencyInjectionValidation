@@ -1,7 +1,7 @@
 
 # Excubo.Analyzers.DependencyInjectionValidation
 
-This roslyn analyzer validates the use of dependency injection (DI) at compile time. It aims to reduce the number of times applications are run where not all dependencies are registered with the service provider.
+This roslyn analyzer validates the use of dependency injection (DI) at compile time. It aims to reduce the number of times applications are run when not all dependencies are registered with the service provider.
 The analysis is performed using class and method attributes. Using it requires the package [Excubo.Analyzers.Annotations](https://github.com/excubo-ag/Analyzers.Annotations) to be installed as well.
 
 # Installation
