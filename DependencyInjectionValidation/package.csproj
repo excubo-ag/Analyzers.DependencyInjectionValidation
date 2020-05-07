@@ -1,0 +1,37 @@
+<Project>
+  <PropertyGroup>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+  <!--Important: this is only a dev dependency, it won't be recursive-->
+  <PropertyGroup>
+    <DevelopmentDependency>true</DevelopmentDependency>
+  </PropertyGroup>
+  <!--Title, Description, Tags, Product, Product-->
+  <PropertyGroup>
+    <Title>Roslyn Analyzer for validation Dependency Injection</Title>
+    <Description>Validate the usage of dependency injection at compile time, rather than run time.</Description>
+    <PackageTags>roslyn,analyzer,dependency injection,DI</PackageTags>
+    <Product>Excubo.Analyzers.DependencyInjectionValidation</Product>
+  </PropertyGroup>
+  <!--Author, Company-->
+  <PropertyGroup>
+    <Authors>Stefan Lörwald</Authors>
+    <Company>excubo ag</Company>
+  </PropertyGroup>
+  <!--Repository-->
+  <PropertyGroup>
+    <PackageProjectUrl>https://github.com/excubo-ag/Analyzers.Annotations</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/excubo-ag/Analyzers.Annotations</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+  </PropertyGroup>
+  <!--PackageId, Version-->
+  <PropertyGroup>
+    <PackageId>Excubo.Analyzers.DependencyInjectionValidation</PackageId>
+    <Version>1.0.0</Version>
+  </PropertyGroup>
+  <!--Self Include-->
+  <ItemGroup>
+    <None Include="package.csproj" />
+  </ItemGroup>
+</Project>
+

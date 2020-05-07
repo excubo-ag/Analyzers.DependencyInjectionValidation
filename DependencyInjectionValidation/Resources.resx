@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="MissingDependencyAnalyzerDescription" xml:space="preserve">
+    <value>A service extension should add all required interfaces for the exposed class. In some cases, it makes sense to ignore a particular dependency, e.g. when it is configured by the user elsewhere (for example: ILogger&lt;T&gt;). In that case, add the attribute IgnoreDependency(params Type[]) to the service extension (e.g. [IgnoreDependency(typeof(ILogger&lt;MyClass&gt;))]).</value>
+  </data>
+  <data name="MissingDependencyAnalyzerMessageFormat" xml:space="preserve">
+    <value>Service extension is not adding all required interfaces for {0}. Missing interface: {1}</value>
+  </data>
+  <data name="MissingDependencyAnalyzerTitle" xml:space="preserve">
+    <value>Incomplete service extension</value>
+  </data>
+  <data name="MissingDependencyInApplicationDescription" xml:space="preserve">
+    <value>A dependency is missing, which means it is unlikely that the program will function correctly. Add the dependency by using either the corresponding service extension, or by adding it with the AddScoped, AddSingleton, or AddTransient methods. If the dependency is added by an extension method that does not communicate which interfaces it exposes (e.g. third party libraries), add the Injects attribute to the DependencyInjectionPoint method. E.g. 
+[DependencyInjectionPoint]
+[Injects(typeof(ILogger&lt;&gt;))]
+public void ConfigureServices(IServiceCollection services) 
+{
+    services.AddLogging(); // ...
+}</value>
+  </data>
+  <data name="MissingDependencyInApplicationMessageFormat" xml:space="preserve">
+    <value>Dependency {0} of {1} is missing.</value>
+  </data>
+  <data name="MissingDependencyInApplicationTitle" xml:space="preserve">
+    <value>Missing dependency</value>
+  </data>
+  <data name="MissingServiceExtensionAnalyzerDescription" xml:space="preserve">
+    <value>Each class in a class library that is intended for dependency injection should have a corresponding service extension.
+E.g.
+public static class ServiceExtensions
+{
+   [Exposes(typeof(MyService)), As(typeof(IMyService))]
+   public static IServiceCollection AddMyService(this IServiceCollection services)
+   {
+       return services.AddSingleton&lt;IMyService, MyService&gt;();
+   }
+}
+
+If you get this warning in project that is not a class library, consider marking the method that initializes your service collection with the DependencyInjectionPoint attribute, e.g.
+public class Startup
+{
+    [DependencyInjectionPoint]
+    public void ConfigureServices(IServiceCollection services)
+    {
+         // adding all required services here
+    }
+}</value>
+    <comment>An optional longer localizable description of the diagnostic.</comment>
+  </data>
+  <data name="MissingServiceExtensionAnalyzerMessageFormat" xml:space="preserve">
+    <value>Missing service extension for class {0} which has a constructor that consumes services</value>
+    <comment>The format-able message the diagnostic displays.</comment>
+  </data>
+  <data name="MissingServiceExtensionAnalyzerTitle" xml:space="preserve">
+    <value>Missing service extension</value>
+    <comment>The title of the diagnostic.</comment>
+  </data>
+  <data name="TooManyServiceExtensionsDescription" xml:space="preserve">
+    <value>Any given class should only be exposed with a service extension once, to avoid confusion of the user.</value>
+  </data>
+  <data name="TooManyServiceExtensionsMessageFormat" xml:space="preserve">
+    <value>Too many service extensions for class {0}. Candidates are: {1}</value>
+  </data>
+  <data name="TooManyServiceExtensionsTitle" xml:space="preserve">
+    <value>Too many service extensions</value>
+  </data>
+</root>
