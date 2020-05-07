@@ -27,7 +27,7 @@ namespace DependencyInjectionValidation.Test
             var missing_interface = all_filenames[0].Split('/', '\\').Last().Replace(".cs", "");
             VerifyCSharpDiagnostic(all_files, new DiagnosticResult
             {
-                Id = "DependencyInjectionValidation",
+                Id = "EDI04",
                 Message = string.Format("Dependency {0} of {1} is missing.", missing_interface, $"DependencyInjectionValidation.Test.{folder_name}"),
                 Severity = DiagnosticSeverity.Warning,
                 Locations = new[]
@@ -45,7 +45,7 @@ namespace DependencyInjectionValidation.Test
             var missing_interface = all_filenames[0].Split('/', '\\').Last().Replace(".cs", "");
             VerifyCSharpDiagnostic(all_files, new DiagnosticResult
             {
-                Id = "DependencyInjectionValidation",
+                Id = "EDI04",
                 Message = string.Format("Dependency {0} of {1} is missing.", missing_interface, $"DependencyInjectionValidation.Test.{folder_name}"),
                 Severity = DiagnosticSeverity.Warning,
                 Locations = new[]

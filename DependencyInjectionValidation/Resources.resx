@@ -121,7 +121,7 @@
     <value>A service extension should add all required interfaces for the exposed class. In some cases, it makes sense to ignore a particular dependency, e.g. when it is configured by the user elsewhere (for example: ILogger&lt;T&gt;). In that case, add the attribute IgnoreDependency(params Type[]) to the service extension (e.g. [IgnoreDependency(typeof(ILogger&lt;MyClass&gt;))]).</value>
   </data>
   <data name="MissingDependencyAnalyzerMessageFormat" xml:space="preserve">
-    <value>Service extension is not adding all required interfaces for {0}. Missing interface: {1}</value>
+    <value>Service extension is not adding all required interfaces for {0}. Missing interface: {1}.</value>
   </data>
   <data name="MissingDependencyAnalyzerTitle" xml:space="preserve">
     <value>Incomplete service extension</value>
@@ -165,7 +165,7 @@ public class Startup
     <comment>An optional longer localizable description of the diagnostic.</comment>
   </data>
   <data name="MissingServiceExtensionAnalyzerMessageFormat" xml:space="preserve">
-    <value>Missing service extension for class {0} which has a constructor that consumes services</value>
+    <value>Missing service extension for class {0}.</value>
     <comment>The format-able message the diagnostic displays.</comment>
   </data>
   <data name="MissingServiceExtensionAnalyzerTitle" xml:space="preserve">
@@ -176,7 +176,7 @@ public class Startup
     <value>Any given class should only be exposed with a service extension once, to avoid confusion of the user.</value>
   </data>
   <data name="TooManyServiceExtensionsMessageFormat" xml:space="preserve">
-    <value>Too many service extensions for class {0}. Candidates are: {1}</value>
+    <value>Too many service extensions for class {0}. Candidates are: {1}.</value>
   </data>
   <data name="TooManyServiceExtensionsTitle" xml:space="preserve">
     <value>Too many service extensions</value>

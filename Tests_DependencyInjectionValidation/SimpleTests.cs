@@ -47,8 +47,8 @@ namespace DependencyInjectionValidation.Test
             var all_files = GetAllFiles($"{path_prefix}/TooManyServiceExtensions/{folder_name}").Select(f => File.ReadAllText(f)).ToArray();
             VerifyCSharpDiagnostic(all_files, new DiagnosticResult
             {
-                Id = "DependencyInjectionValidation",
-                Message = string.Format("Too many service extensions for class {0}. Candidates are: {1}", $"Types.{folder_name}", "Types.ServiceExtension.AddService1, Types.ServiceExtension.AddService2"),
+                Id = "EDI01",
+                Message = string.Format("Too many service extensions for class {0}. Candidates are: {1}.", $"Types.{folder_name}", "Types.ServiceExtension.AddService1, Types.ServiceExtension.AddService2"),
                 Severity = DiagnosticSeverity.Warning,
                 Locations = new[]
                 {
@@ -63,8 +63,8 @@ namespace DependencyInjectionValidation.Test
             var all_files = GetAllFiles($"{path_prefix}/TooManyServiceExtensions/{folder_name}").Select(f => File.ReadAllText(f)).ToArray();
             VerifyCSharpDiagnostic(all_files, new DiagnosticResult
             {
-                Id = "DependencyInjectionValidation",
-                Message = string.Format("Too many service extensions for class {0}. Candidates are: {1}", $"Types.{folder_name}", "Types.ServiceExtension.AddService1<U1,U2>, Types.ServiceExtension.AddService2<U1,U2>"),
+                Id = "EDI01",
+                Message = string.Format("Too many service extensions for class {0}. Candidates are: {1}.", $"Types.{folder_name}", "Types.ServiceExtension.AddService1<U1,U2>, Types.ServiceExtension.AddService2<U1,U2>"),
                 Severity = DiagnosticSeverity.Warning,
                 Locations = new[]
                 {
@@ -81,8 +81,8 @@ namespace DependencyInjectionValidation.Test
             var all_files = GetAllFiles($"{path_prefix}/MissingServiceExtension/{folder_name}").Select(f => File.ReadAllText(f)).ToArray();
             VerifyCSharpDiagnostic(all_files, new DiagnosticResult
             {
-                Id = "DependencyInjectionValidation",
-                Message = string.Format("Missing service extension for class {0} which has a constructor that consumes services", $"Types.{folder_name}"),
+                Id = "EDI02",
+                Message = string.Format("Missing service extension for class {0}.", $"Types.{folder_name}"),
                 Severity = DiagnosticSeverity.Warning,
                 Locations = new[]
                 {
@@ -106,8 +106,8 @@ namespace DependencyInjectionValidation.Test
             var missing_interface = all_filenames[0].Split('/', '\\').Last().Replace(".cs", "");
             VerifyCSharpDiagnostic(all_files, new DiagnosticResult
             {
-                Id = "DependencyInjectionValidation",
-                Message = string.Format("Service extension is not adding all required interfaces for {0}. Missing interface: {1}", $"Types.{folder_name}", missing_interface),
+                Id = "EDI03",
+                Message = string.Format("Service extension is not adding all required interfaces for {0}. Missing interface: {1}.", $"Types.{folder_name}", missing_interface),
                 Severity = DiagnosticSeverity.Warning,
                 Locations = new[]
                 {
@@ -128,8 +128,8 @@ namespace DependencyInjectionValidation.Test
             var missing_interface = all_filenames[0].Split('/', '\\').Last().Replace(".cs", "");
             VerifyCSharpDiagnostic(all_files, new DiagnosticResult
             {
-                Id = "DependencyInjectionValidation",
-                Message = string.Format("Service extension is not adding all required interfaces for {0}. Missing interface: {1}", $"Types.{folder_name}", missing_interface),
+                Id = "EDI03",
+                Message = string.Format("Service extension is not adding all required interfaces for {0}. Missing interface: {1}.", $"Types.{folder_name}", missing_interface),
                 Severity = DiagnosticSeverity.Warning,
                 Locations = new[]
                 {
@@ -150,8 +150,8 @@ namespace DependencyInjectionValidation.Test
             var missing_interface = all_filenames[0].Split('/', '\\').Last().Replace(".cs", "");
             VerifyCSharpDiagnostic(all_files, new DiagnosticResult
             {
-                Id = "DependencyInjectionValidation",
-                Message = string.Format("Service extension is not adding all required interfaces for {0}. Missing interface: {1}", $"Types.{folder_name}", missing_interface),
+                Id = "EDI03",
+                Message = string.Format("Service extension is not adding all required interfaces for {0}. Missing interface: {1}.", $"Types.{folder_name}", missing_interface),
                 Severity = DiagnosticSeverity.Warning,
                 Locations = new[]
                 {

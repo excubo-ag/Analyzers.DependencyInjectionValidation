@@ -70,7 +70,7 @@ namespace DependencyInjectionValidation {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Service extension is not adding all required interfaces for {0}. Missing interface: {1}.
+        ///   Looks up a localized string similar to Service extension is not adding all required interfaces for {0}. Missing interface: {1}..
         /// </summary>
         internal static string MissingDependencyAnalyzerMessageFormat {
             get {
@@ -138,7 +138,7 @@ namespace DependencyInjectionValidation {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Missing service extension for class {0} which has a constructor that consumes services.
+        ///   Looks up a localized string similar to Missing service extension for class {0}..
         /// </summary>
         internal static string MissingServiceExtensionAnalyzerMessageFormat {
             get {
@@ -165,7 +165,7 @@ namespace DependencyInjectionValidation {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Too many service extensions for class {0}. Candidates are: {1}.
+        ///   Looks up a localized string similar to Too many service extensions for class {0}. Candidates are: {1}..
         /// </summary>
         internal static string TooManyServiceExtensionsMessageFormat {
             get {
