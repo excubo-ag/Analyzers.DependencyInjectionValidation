@@ -23,12 +23,22 @@ dotnet add package Excubo.Analyzers.Annotations --version 1.0.0
 
 # How to use
 
-Imagine your app using a service called `IService`. An implementation of this service needs to be added to the service collection, otherwise the app can't run. If you forget to add the service, the app will only fail at run time. This analyzer helps to detect such situations before the application is run.
+Imagine your app is using a service called `IService`. An implementation of this service needs to be added to the service collection, otherwise the app can't run. This analyzer helps to detect such situations before the application is run.
 
-If you happen to not have any annotations, you will get the error message
+Here's the service implementing `IService`:
 
 ```cs
+namespace Foo
+{
+   public class Service : IService
+   {
+   }
+}
+```
 
+If you happen to not have any annotations, you will get the following error message
+
+```cs
 namespace Foo
 {
    public class Service : IService
