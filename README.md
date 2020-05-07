@@ -12,11 +12,13 @@ Excubo.Analyzers.DependencyInjectionValidation is distributed via [via nuget.org
 #### Package Manager:
 ```ps
 Install-Package Excubo.Analyzers.DependencyInjectionValidation -Version 1.0.0
+Install-Package Excubo.Analyzers.Annotations -Version 1.0.0
 ```
 
 #### .NET Cli:
 ```cmd
 dotnet add package Excubo.Analyzers.DependencyInjectionValidation --version 1.0.0
+dotnet add package Excubo.Analyzers.Annotations --version 1.0.0
 ```
 
 # How to use
