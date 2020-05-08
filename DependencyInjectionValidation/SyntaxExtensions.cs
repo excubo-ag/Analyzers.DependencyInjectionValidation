@@ -52,6 +52,8 @@ namespace DependencyInjectionValidation
                     return qns.Left.ToString() + "." + qns.Right.GetNameWithEmptyTypeParameters();
                 case PredefinedTypeSyntax pts:
                     return pts.ToString();
+                case TupleTypeSyntax tts:
+                    return tts.ToString();
                 default:
                     throw new NotSupportedException();
             }
@@ -67,6 +69,8 @@ namespace DependencyInjectionValidation
                 case QualifiedNameSyntax qns:
                     return qns.Right.GetGenericTypeArgumentCount();
                 case PredefinedTypeSyntax _:
+                    return 0;
+                case TupleTypeSyntax tts:
                     return 0;
                 default:
                     throw new NotSupportedException();
