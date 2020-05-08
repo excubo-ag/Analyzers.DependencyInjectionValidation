@@ -9,7 +9,15 @@ namespace DependencyInjectionValidation
     {
         public Class OriginalHandledType { get; }
         public Class HandledType { get; }
-        public List<Interface> AddedInterfaces { get; private set; }
+        internal List<Interface> AlwaysAvailableInterfaces { get; set; }
+        internal List<Interface> ExplicitelyInjectedInterfaces { get; set; }
+        internal List<Interface> ExplicitelyIgnoredInterfaces { get; set; }
+        internal List<Interface> RecursivelyDiscoveredInterfaces { get; set; }
+        internal IEnumerable<Interface> AddedInterfaces =>
+            ExplicitelyInjectedInterfaces == null || RecursivelyDiscoveredInterfaces == null || AlwaysAvailableInterfaces == null || ExplicitelyIgnoredInterfaces == null
+            ? null
+            : AlwaysAvailableInterfaces.Concat(ExplicitelyInjectedInterfaces).Concat(ExplicitelyIgnoredInterfaces).Concat(RecursivelyDiscoveredInterfaces).Where(i => i != null);
+
         public List<Interface> RequiredInterfaces { get; private set; }
         public List<Interface> MissingInterfaces { get; private set; }
         public SimpleServiceExtension(ServiceExtension service_extension, Class handled_type)
@@ -28,37 +36,21 @@ namespace DependencyInjectionValidation
             {
                 return;
             }
-            var added_interfaces = new List<Interface>
+            AlwaysAvailableInterfaces = new List<Interface>
             {
-                Helpers.FindInterface("System.IServiceProvider", interfaces, compilation) // this type is always available for DI
+                Helpers.FindInterface("System.IServiceProvider", interfaces, compilation),
+                Helpers.FindInterface("System.IDisposable", interfaces, compilation)
             };
+            ExplicitelyInjectedInterfaces = FindExplicitelyInjectedInterfaces(interfaces, compilation).ToList();
             if (include_ignored)
             {
-                added_interfaces.AddRange(FindExplicitelyIgnoredInterfaces(interfaces, compilation));
+                ExplicitelyIgnoredInterfaces = FindExplicitelyIgnoredInterfaces(interfaces, compilation).ToList();
             }
-            added_interfaces.AddRange(FindAddedInterfaces(all_service_extensions, interfaces, compilation));
-            AddedInterfaces = added_interfaces;
-        }
-        private IEnumerable<Interface> FindExplicitelyIgnoredInterfaces(List<Interface> interfaces, Compilation compilation)
-        {
-            return Declaration.AttributeLists
-                .SelectMany(a => a.Attributes) // find all attributes
-                .Where(attr => attr.Name.ToString() == "IgnoreDependency") // that are the ignore attribute
-                .SelectMany(attr => attr.ArgumentList.Arguments) // get their arguments
-                .Select(a => a.Expression) // and their expressions
-                .OfType<TypeOfExpressionSyntax>() // that are typeof() expressions
-                .Select(parameter => FindExplicitelyIgnoredInterfaces(parameter, interfaces, compilation))
-                .Where(i => i != null);
-        }
-        private Interface FindExplicitelyIgnoredInterfaces(TypeOfExpressionSyntax parameter, List<Interface> interfaces, Compilation compilation)
-        {
-            var type = Helpers.FindInterface(parameter.Type, interfaces, compilation);
-            if (type != null)
+            else
             {
-                type.Specialise(parameter.Type, even_if_empty: true);
-                return type;
+                ExplicitelyIgnoredInterfaces = new List<Interface>();
             }
-            return null;
+            RecursivelyDiscoveredInterfaces = FindAddedInterfaces(all_service_extensions, interfaces, compilation).ToList();
         }
         private IEnumerable<Interface> FindAddedInterfaces(List<SimpleServiceExtension> all_service_extensions, List<Interface> interfaces, Compilation compilation)
         {

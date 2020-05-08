@@ -9,11 +9,12 @@ namespace DependencyInjectionValidation
     {
         internal List<Interface> AlwaysAvailableInterfaces { get; set; }
         internal List<Interface> ExplicitelyInjectedInterfaces { get; set; }
+        internal List<Interface> ExplicitelyIgnoredInterfaces { get; set; }
         internal List<Interface> RecursivelyDiscoveredInterfaces { get; set; }
         internal IEnumerable<Interface> AddedInterfaces => 
-            ExplicitelyInjectedInterfaces == null || RecursivelyDiscoveredInterfaces == null || AlwaysAvailableInterfaces == null 
+            ExplicitelyInjectedInterfaces == null || RecursivelyDiscoveredInterfaces == null || AlwaysAvailableInterfaces == null || ExplicitelyIgnoredInterfaces == null
             ? null
-            : AlwaysAvailableInterfaces.Concat(ExplicitelyInjectedInterfaces).Concat(RecursivelyDiscoveredInterfaces).Where(i => i != null);
+            : AlwaysAvailableInterfaces.Concat(ExplicitelyInjectedInterfaces).Concat(ExplicitelyIgnoredInterfaces).Concat(RecursivelyDiscoveredInterfaces).Where(i => i != null);
 
         public DependencyInjectionPoint(string fully_qualified_name, MethodDeclarationSyntax method)
         {
@@ -32,28 +33,8 @@ namespace DependencyInjectionValidation
                 Helpers.FindInterface("System.IDisposable", interfaces, compilation)
             };
             ExplicitelyInjectedInterfaces = FindExplicitelyInjectedInterfaces(interfaces, compilation).ToList();
+            ExplicitelyIgnoredInterfaces = FindExplicitelyIgnoredInterfaces(interfaces, compilation).ToList();
             RecursivelyDiscoveredInterfaces = FindAddedInterfaces(all_dependency_injection_points, all_service_extensions, interfaces, compilation).ToList();
-
-        }
-        private IEnumerable<Interface> FindExplicitelyInjectedInterfaces(List<Interface> interfaces, Compilation compilation)
-        {
-            return Declaration.AttributeLists
-                .SelectMany(a => a.Attributes) // find all attributes
-                .Where(attr => attr.Name.ToString() == "Injects") // that are the injects attribute
-                .SelectMany(attr => attr.ArgumentList.Arguments) // get their arguments
-                .Select(a => a.Expression) // and their expressions
-                .OfType<TypeOfExpressionSyntax>() // that are typeof() expressions
-                .Select(parameter => FindExplicitelyInjectedInterfaces(parameter, interfaces, compilation))
-                .Where(i => i != null);
-        }
-        private Interface FindExplicitelyInjectedInterfaces(TypeOfExpressionSyntax parameter, List<Interface> interfaces, Compilation compilation)
-        {
-            var type = Helpers.FindInterface(parameter.Type, interfaces, compilation);
-            if (type != null)
-            {
-                type.Specialise(parameter.Type, even_if_empty: true);
-            }
-            return type;
         }
         private IEnumerable<Interface> FindAddedInterfaces(List<DependencyInjectionPoint> all_dependency_injection_points, List<SimpleServiceExtension> all_service_extensions, List<Interface> interfaces, Compilation compilation)
         {
