@@ -17,7 +17,7 @@ namespace TestHelper
     {
         protected IEnumerable<string> GetAllFiles(string dir)
         {
-            return Directory.GetDirectories(dir).SelectMany(subdir => GetAllFiles(subdir)).Concat(Directory.GetFiles(dir));
+            return Directory.GetDirectories(dir).SelectMany(subdir => GetAllFiles(subdir)).Concat(Directory.GetFiles(dir).Where(f => f.EndsWith(".cs")));
         }
         /// <summary>
         /// Apply the inputted CodeAction to the inputted document.
