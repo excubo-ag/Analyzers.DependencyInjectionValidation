@@ -7,7 +7,13 @@ namespace DependencyInjectionValidation
 {
     internal class DependencyInjectionPoint : ServiceExtensionBase
     {
-        public List<Interface> AddedInterfaces { get; private set; }
+        internal List<Interface> AlwaysAvailableInterfaces { get; set; }
+        internal List<Interface> ExplicitelyInjectedInterfaces { get; set; }
+        internal List<Interface> RecursivelyDiscoveredInterfaces { get; set; }
+        internal IEnumerable<Interface> AddedInterfaces => 
+            ExplicitelyInjectedInterfaces == null || RecursivelyDiscoveredInterfaces == null || AlwaysAvailableInterfaces == null 
+            ? null
+            : AlwaysAvailableInterfaces.Concat(ExplicitelyInjectedInterfaces).Concat(RecursivelyDiscoveredInterfaces).Where(i => i != null);
 
         public DependencyInjectionPoint(string fully_qualified_name, MethodDeclarationSyntax method)
         {
@@ -20,13 +26,14 @@ namespace DependencyInjectionValidation
             {
                 return;
             }
-            var added_interfaces = new List<Interface>
+            AlwaysAvailableInterfaces = new List<Interface>
             {
-                Helpers.FindInterface("System.IServiceProvider", interfaces, compilation) // this type is always available for DI
+                Helpers.FindInterface("System.IServiceProvider", interfaces, compilation),
+                Helpers.FindInterface("System.IDisposable", interfaces, compilation)
             };
-            added_interfaces.AddRange(FindExplicitelyInjectedInterfaces(interfaces, compilation));
-            added_interfaces.AddRange(FindAddedInterfaces(all_dependency_injection_points, all_service_extensions, interfaces, compilation));
-            AddedInterfaces = added_interfaces;
+            ExplicitelyInjectedInterfaces = FindExplicitelyInjectedInterfaces(interfaces, compilation).ToList();
+            RecursivelyDiscoveredInterfaces = FindAddedInterfaces(all_dependency_injection_points, all_service_extensions, interfaces, compilation).ToList();
+
         }
         private IEnumerable<Interface> FindExplicitelyInjectedInterfaces(List<Interface> interfaces, Compilation compilation)
         {
@@ -44,13 +51,9 @@ namespace DependencyInjectionValidation
             var type = Helpers.FindInterface(parameter.Type, interfaces, compilation);
             if (type != null)
             {
-                type.Specialise(parameter.Type);
-                if (parameter.Type is GenericNameSyntax gns && !gns.TypeArgumentList.Arguments.All(a => string.IsNullOrEmpty(a.ToString())))
-                {
-                    return type;
-                }
+                type.Specialise(parameter.Type, even_if_empty: true);
             }
-            return null;
+            return type;
         }
         private IEnumerable<Interface> FindAddedInterfaces(List<DependencyInjectionPoint> all_dependency_injection_points, List<SimpleServiceExtension> all_service_extensions, List<Interface> interfaces, Compilation compilation)
         {

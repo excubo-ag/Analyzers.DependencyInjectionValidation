@@ -31,8 +31,10 @@ namespace DependencyInjectionValidation
         private static readonly DiagnosticDescriptor MissingServiceExtensionRule = new DiagnosticDescriptor("EDI02", MissingServiceExtensionTitle, MissingServiceExtensionMessageFormat, Category, DiagnosticSeverity.Warning, isEnabledByDefault: true, description: MissingServiceExtensionDescription);
         private static readonly DiagnosticDescriptor MissingDependencyRule = new DiagnosticDescriptor("EDI03", MissingDependencyTitle, MissingDependencyMessageFormat, Category, DiagnosticSeverity.Warning, isEnabledByDefault: true, description: MissingDependencyDescription);
         private static readonly DiagnosticDescriptor MissingDependencyInApplicationRule = new DiagnosticDescriptor("EDI04", MissingDependencyInApplicationTitle, MissingDependencyInApplicationMessageFormat, Category, DiagnosticSeverity.Warning, isEnabledByDefault: true, description: MissingDependencyInApplicationDescription);
-
-        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get { return ImmutableArray.Create(MissingServiceExtensionRule, MissingDependencyRule, TooManyServiceExtensionsRule, MissingDependencyInApplicationRule); } }
+        //internal static readonly DiagnosticDescriptor DebuggingRule = new DiagnosticDescriptor("INTERNAL", "DEBUGGING", "{0}", Category, DiagnosticSeverity.Warning, isEnabledByDefault: true, description: "");
+        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get { return ImmutableArray.Create(MissingServiceExtensionRule, MissingDependencyRule, TooManyServiceExtensionsRule, MissingDependencyInApplicationRule
+        //    , DebuggingRule
+            ); } }
 
         public override void Initialize(AnalysisContext context)
         {
