@@ -94,7 +94,18 @@ namespace DependencyInjectionValidation
         {
             foreach (var property in Declaration.Members.OfType<PropertyDeclarationSyntax>())
             {
-                var has_inject_attribute = property.AttributeLists.SelectMany(a => a.Attributes).Any(a => a.Name.ToString() == "Inject");
+                var has_inject_attribute = property.AttributeLists.SelectMany(a => a.Attributes).Any(a =>
+                {
+                    switch (a.Name.ToString())
+                    {
+                        case "Inject":
+                        case "InjectAttribute":
+                        case "global::Microsoft.AspNetCore.Components.InjectAttribute":
+                            return true;
+                        default:
+                            return false;
+                    }
+                });
                 if (!has_inject_attribute)
                 {
                     continue;
@@ -152,7 +163,8 @@ namespace DependencyInjectionValidation
         {
             if (@class.IsPublic)
             {
-                if (@class.Constructors.Any(constructor => constructor.IsPublic && constructor.Dependencies.Count == 0))
+                if (@class.Constructors.Any(constructor => constructor.IsPublic && constructor.Dependencies.Count == 0)
+                 && !@class.InjectedPropertyTypes.Any())
                 {
                     return false; // the class is trivially constructible, so we assume it's left for the user to do.
                 }
@@ -171,7 +183,8 @@ namespace DependencyInjectionValidation
             }
             else if (@class.IsInternal)
             {
-                if (@class.Constructors.Any(constructor => (constructor.IsPublic || constructor.IsInternal) && constructor.Dependencies.Count == 0))
+                if (@class.Constructors.Any(constructor => (constructor.IsPublic || constructor.IsInternal) && constructor.Dependencies.Count == 0)
+                 && !@class.InjectedPropertyTypes.Any())
                 {
                     return false; // the class is trivially constructible, so we assume it's left for the user to do.
                 }
