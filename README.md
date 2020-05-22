@@ -49,7 +49,7 @@ namespace Foo
 }
 ```
 
-If this is a class library, this is exactly what you should add: your users don't want to know how to add your service needs to be added, they just want to add it.
+If this is a class library, this is exactly what you should add: your users don't want to know how your service needs to be added, they just want to add it.
 
 The solution is to write a service extension method, e.g.
 
