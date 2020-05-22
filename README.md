@@ -73,7 +73,7 @@ namespace Foo
 
 Note the attributes on the extension method. They are used by this analyzer to validate whether everything seems fine. With `Expose(typeof(Service))` you tell the analyzer to match this extension method up with the class `Service`. `As(typeof(IService))` is used by the analyzer to see which services are implemented here.
 
-If this is not a class library project, you should add the `DependencyInjectionPoint` attribute to the method that adds all your services (usually in a file called `Startup.cs`
+If this is not a class library project, you should add the `DependencyInjectionPoint` attribute to the method that adds all your services (usually in a file called `Startup.cs`)
 
 ```cs
 namespace Application
