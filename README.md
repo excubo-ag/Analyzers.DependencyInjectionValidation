@@ -43,7 +43,7 @@ namespace Foo
 {
    public class Service : IService
                 ~~~~~~~
-                ^ Missing service extension for class {0}.
+                ^ Missing service extension for class Service.
    {
    }
 }
