@@ -12,6 +12,14 @@ using System.Reflection;
 
 namespace TestHelper
 {
+    internal static class EnumerableExtension
+    {
+        public static IEnumerable<T> Distinct<T, U>(this IEnumerable<T> enumerable, Func<T, U> key)
+        {
+            var hashset = new HashSet<U>();
+            return enumerable.Where(e => hashset.Add(key(e)));
+        }
+    }
     /// <summary>
     /// Class for turning strings into documents and getting the diagnostics on them
     /// All methods are static
@@ -159,18 +167,24 @@ namespace TestHelper
             var solution = new AdhocWorkspace()
                 .CurrentSolution
                 .AddProject(projectId, TestProjectName, TestProjectName, language)
-                .AddMetadataReference(projectId, CorlibReference)
-                .AddMetadataReference(projectId, SystemCoreReference)
-                .AddMetadataReference(projectId, CSharpSymbolsReference)
-                .AddMetadataReference(projectId, CodeAnalysisReference)
-                .AddMetadataReference(projectId, SelfReference)
-                .AddMetadataReference(projectId, AttributeReference)
-                .AddMetadataReference(projectId, ServiceProviderReference)
-                .AddMetadataReference(projectId, NetStandard20Reference)
-                .AddMetadataReference(projectId, RuntimeReference)
-                .AddMetadataReference(projectId, TestDependencyReference)
-                .AddMetadataReference(projectId, GenericCollectionsReference)
-                .AddMetadataReference(projectId, ServiceProviderReference);
+                .AddMetadataReferences(projectId, new[]
+                {
+                    CorlibReference,
+                    SystemCoreReference,
+                    CSharpSymbolsReference,
+                    CodeAnalysisReference,
+                    AttributeReference,
+                    ServiceProviderReference,
+                    NetStandard20Reference,
+                    RuntimeReference,
+                    GenericCollectionsReference,
+                    ServiceProviderReference,
+                    TestDependencyReference,
+                    SelfReference
+                }.Distinct(mdr =>
+                {
+                    return mdr.Display;
+                }));
 
             int count = 0;
             foreach (var source in sources)
