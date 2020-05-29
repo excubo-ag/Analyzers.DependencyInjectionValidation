@@ -43,13 +43,13 @@ namespace Foo
 {
    public class Service : IService
                 ~~~~~~~
-                ^ Missing service extension for class {0}.
+                ^ Missing service extension for class Service.
    {
    }
 }
 ```
 
-If this is a class library, this is exactly what you should add: your users don't want to know how to add your service needs to be added, they just want to add it.
+If this is a class library, this is exactly what you should add: your users don't want to know how your service needs to be added, they just want to add it.
 
 The solution is to write a service extension method, e.g.
 
@@ -73,7 +73,7 @@ namespace Foo
 
 Note the attributes on the extension method. They are used by this analyzer to validate whether everything seems fine. With `Expose(typeof(Service))` you tell the analyzer to match this extension method up with the class `Service`. `As(typeof(IService))` is used by the analyzer to see which services are implemented here.
 
-If this is not a class library project, you should add the `DependencyInjectionPoint` attribute to the method that adds all your services (usually in a file called `Startup.cs`
+If this is not a class library project, you should add the `DependencyInjectionPoint` attribute to the method that adds all your services (usually in a file called `Startup.cs`)
 
 ```cs
 namespace Application
