@@ -15,9 +15,13 @@ namespace TestHelper
     /// </summary>
     public abstract partial class CodeFixVerifier : DiagnosticVerifier
     {
-        protected IEnumerable<string> GetAllFiles(string dir)
+        protected IEnumerable<string> GetAllFilenames(string dir)
         {
-            return Directory.GetDirectories(dir).SelectMany(subdir => GetAllFiles(subdir)).Concat(Directory.GetFiles(dir).Where(f => f.EndsWith(".cs")));
+            return Directory.GetDirectories(dir).SelectMany(subdir => GetAllFilenames(subdir)).Concat(Directory.GetFiles(dir).Where(f => f.EndsWith(".cs")));
+        }
+        protected IEnumerable<string> GetAllFileContents(string dir)
+        {
+            return GetAllFilenames(dir).Select(f => File.ReadAllText(f));
         }
         /// <summary>
         /// Apply the inputted CodeAction to the inputted document.

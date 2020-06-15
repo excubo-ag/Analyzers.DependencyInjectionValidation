@@ -23,7 +23,7 @@ namespace DependencyInjectionValidation.Test
         [DataRow("InheritJustClass")]
         public void NoDiagnostic(string folder_name)
         {
-            var all_files = GetAllFiles($"{path_prefix}/NoDiagnostic/{folder_name}").Select(f => File.ReadAllText(f)).ToArray();
+            var all_files = GetAllFilenames($"{path_prefix}/NoDiagnostic/{folder_name}").Select(f => File.ReadAllText(f)).ToArray();
             VerifyCSharpDiagnostic(all_files);
         }
         [DataTestMethod]
@@ -32,7 +32,7 @@ namespace DependencyInjectionValidation.Test
         [DataRow("ImplementationOfInterfaceFromOtherAssemblyWithDependency")]
         public void TooManyServiceExtensions(string folder_name)
         {
-            var all_files = GetAllFiles($"{path_prefix}/TooManyServiceExtensions/{folder_name}").Select(f => File.ReadAllText(f)).ToArray();
+            var all_files = GetAllFilenames($"{path_prefix}/TooManyServiceExtensions/{folder_name}").Select(f => File.ReadAllText(f)).ToArray();
             VerifyCSharpDiagnostic(all_files, new DiagnosticResult
             {
                 Id = "EDI01",
@@ -48,7 +48,7 @@ namespace DependencyInjectionValidation.Test
         [DataRow("DependingOnOtherAssemblyAndImplementingLocal_B1_B2_")]
         public void TooManyServiceExtensionsGeneric(string folder_name)
         {
-            var all_files = GetAllFiles($"{path_prefix}/TooManyServiceExtensions/{folder_name}").Select(f => File.ReadAllText(f)).ToArray();
+            var all_files = GetAllFilenames($"{path_prefix}/TooManyServiceExtensions/{folder_name}").Select(f => File.ReadAllText(f)).ToArray();
             VerifyCSharpDiagnostic(all_files, new DiagnosticResult
             {
                 Id = "EDI01",
@@ -66,7 +66,7 @@ namespace DependencyInjectionValidation.Test
         [DataRow("ImplementationOfInterfaceFromOtherAssemblyWithDependency")]
         public void MissingServiceExtension(string folder_name)
         {
-            var all_files = GetAllFiles($"{path_prefix}/MissingServiceExtension/{folder_name}").Select(f => File.ReadAllText(f)).ToArray();
+            var all_files = GetAllFilenames($"{path_prefix}/MissingServiceExtension/{folder_name}").Select(f => File.ReadAllText(f)).ToArray();
             VerifyCSharpDiagnostic(all_files, new DiagnosticResult
             {
                 Id = "EDI02",
@@ -85,7 +85,7 @@ namespace DependencyInjectionValidation.Test
         [DataRow("Impl")]
         public void MissingDependencyBase(string folder_name)
         {
-            var all_filenames = GetAllFiles($"{path_prefix}/MissingDependencyBase/{folder_name}").ToArray();
+            var all_filenames = GetAllFilenames($"{path_prefix}/MissingDependencyBase/{folder_name}").ToArray();
             var all_files = all_filenames.Select(f => File.ReadAllText(f)).ToArray();
             var missing_interface = all_filenames[0].Split('/', '\\').Last().Replace(".cs", "");
             VerifyCSharpDiagnostic(all_files, new DiagnosticResult
@@ -106,7 +106,7 @@ namespace DependencyInjectionValidation.Test
         [DataRow("ImplementationOfInterfaceFromOtherAssemblyWithDependency")]
         public void MissingConstructorDependency(string folder_name)
         {
-            var all_filenames = GetAllFiles($"{path_prefix}/MissingConstructorDependency/{folder_name}").ToArray();
+            var all_filenames = GetAllFilenames($"{path_prefix}/MissingConstructorDependency/{folder_name}").ToArray();
             var all_files = all_filenames.Select(f => File.ReadAllText(f)).ToArray();
             var missing_interface = all_filenames[0].Split('/', '\\').Last().Replace(".cs", "");
             VerifyCSharpDiagnostic(all_files, new DiagnosticResult
