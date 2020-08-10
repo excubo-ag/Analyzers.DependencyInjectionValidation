@@ -47,7 +47,7 @@ namespace DependencyInjectionValidation.Test
                 Message = string.Format("Too many service extensions for class {0}. Candidates are: {1}.", $"Types.{folder_name}", "Types.ServiceExtension.AddService1, Types.ServiceExtension.AddService2"),
                 Severity = DiagnosticSeverity.Warning,
                 Locations = new[]
-                {   
+                {
                     new DiagnosticResultLocation("Test0.cs", 37, 18)
                 }
             });

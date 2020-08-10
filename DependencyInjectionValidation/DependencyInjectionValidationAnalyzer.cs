@@ -32,9 +32,15 @@ namespace DependencyInjectionValidation
         private static readonly DiagnosticDescriptor MissingDependencyRule = new DiagnosticDescriptor("EDI03", MissingDependencyTitle, MissingDependencyMessageFormat, Category, DiagnosticSeverity.Warning, isEnabledByDefault: true, description: MissingDependencyDescription);
         private static readonly DiagnosticDescriptor MissingDependencyInApplicationRule = new DiagnosticDescriptor("EDI04", MissingDependencyInApplicationTitle, MissingDependencyInApplicationMessageFormat, Category, DiagnosticSeverity.Warning, isEnabledByDefault: true, description: MissingDependencyInApplicationDescription);
         //private static readonly DiagnosticDescriptor DebuggingRule = new DiagnosticDescriptor("INTERNAL", "DEBUGGING", "{0}", Category, DiagnosticSeverity.Warning, isEnabledByDefault: true, description: "");
-        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get { return ImmutableArray.Create(MissingServiceExtensionRule, MissingDependencyRule, TooManyServiceExtensionsRule, MissingDependencyInApplicationRule
-        //    , DebuggingRule
-            ); } }
+        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics
+        {
+            get
+            {
+                return ImmutableArray.Create(MissingServiceExtensionRule, MissingDependencyRule, TooManyServiceExtensionsRule, MissingDependencyInApplicationRule
+//    , DebuggingRule
+);
+            }
+        }
 
         public override void Initialize(AnalysisContext context)
         {
@@ -143,7 +149,7 @@ namespace DependencyInjectionValidation
             foreach (var @class in required_additions)
             {
                 var dependencies = @class.RequiredInterfaces().ToList();
-                var missing_dependencies = dependencies.Where(r => !fulfilled_dependencies.Any(i => 
+                var missing_dependencies = dependencies.Where(r => !fulfilled_dependencies.Any(i =>
                     i.FullyQualifiedName == r.FullyQualifiedName ||
                     (i.FullyQualifiedName == i.GenericTypeName && i.GenericTypeName == r.GenericTypeName)
                     )).ToList();

@@ -11,34 +11,34 @@ namespace DependencyInjectionValidation.Test.Dependency
     {
         [Exposes(typeof(OtherAssemblyDependingOnServiceInPublicConstructor)), As(typeof(IOtherAssemblyPublicUse1))]
         public static IServiceCollection AddOtherAssemblyDependingOnServiceInPublicConstructor(this IServiceCollection services) => services;
-        
+
         [Exposes(typeof(OtherAssemblyDependingOnServiceInInternalConstructor)), As(typeof(IOtherAssemblyPublicUse1))]
         public static IServiceCollection AddOtherAssemblyDependingOnServiceInInternalConstructor(this IServiceCollection services) => services;
-        
+
         [Exposes(typeof(OtherAssemblyDependingOnServiceInPublicConstructor<string, object>)), As(typeof(IOtherAssemblyPublicUse1<string>))]
         public static IServiceCollection AddOtherAssemblyDependingOnServiceInPublicConstructorFixedParameters(this IServiceCollection services) => services;
-        
+
         [Exposes(typeof(OtherAssemblyDependingOnServiceInPublicConstructor<,>)), As(typeof(IOtherAssemblyPublicUse1<>))]
         public static IServiceCollection AddOtherAssemblyDependingOnServiceInPublicConstructorBothFreeParameters<U1, U2>(this IServiceCollection services) => services;
 
         [Exposes(typeof(OtherAssemblyDependingOnServiceInPublicConstructor<,>)), As(typeof(IOtherAssemblyPublicUse1<>))]
         public static IServiceCollection AddOtherAssemblyDependingOnServiceInPublicConstructorFirstFreeParameters<U2>(this IServiceCollection services) => services;
-        
+
         [Exposes(typeof(OtherAssemblyDependingOnServiceInPublicConstructor<,>)), As(typeof(IOtherAssemblyPublicUse1<object>))]
         public static IServiceCollection AddOtherAssemblyDependingOnServiceInPublicConstructorSecondFreeParameters<U1>(this IServiceCollection services) => services;
 
         [Exposes(typeof(OtherAssemblyImplicitUse)), As(typeof(IOtherAssemblyPublicUse1))]
         public static IServiceCollection AddOtherAssemblyImplicitUse(this IServiceCollection services) => services;
-        
+
         [Exposes(typeof(OtherAssemblyImplicitUse<System.Type>)), As(typeof(IOtherAssemblyPublicUse1<System.Type>))]
         public static IServiceCollection AddOtherAssemblyImplicitUseOneFixedParameter(this IServiceCollection services) => services;
-        
+
         [Exposes(typeof(OtherAssemblyImplicitUse<>)), As(typeof(IOtherAssemblyPublicUse1<>))]
         public static IServiceCollection AddOtherAssemblyImplicitUseOneFreeParameter<V>(this IServiceCollection services) => services;
-        
+
         [Exposes(typeof(OtherAssemblyImplicitUse<string, object>)), As(typeof(IOtherAssemblyPublicUse1<string, object>))]
         public static IServiceCollection AddOtherAssemblyImplicitUseTwoFixedParameters(this IServiceCollection services) => services;
-        
+
         [Exposes(typeof(OtherAssemblyImplicitUse<,>)), As(typeof(IOtherAssemblyPublicUse1<,>))]
         public static IServiceCollection AddOtherAssemblyImplicitUseTwoFreeParameters<V1, V2>(this IServiceCollection services, string parameter) => services;
     }

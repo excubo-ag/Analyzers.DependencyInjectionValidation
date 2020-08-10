@@ -119,7 +119,7 @@ namespace DependencyInjectionValidation
         }
         public List<Interface> Bases { get; private set; } = new List<Interface>();
         public List<Constructor> Constructors { get; private set; }
-        public List<Interface> InjectedPropertyTypes { get; private set;  } = new List<Interface>();
+        public List<Interface> InjectedPropertyTypes { get; private set; } = new List<Interface>();
     }
     internal static class ClassExtensions
     {

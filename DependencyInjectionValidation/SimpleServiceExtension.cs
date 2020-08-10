@@ -106,7 +106,7 @@ namespace DependencyInjectionValidation
         }
         internal void FindMissingInterfaces()
         {
-            MissingInterfaces = RequiredInterfaces.Where(r => !AddedInterfaces.Any(i => 
+            MissingInterfaces = RequiredInterfaces.Where(r => !AddedInterfaces.Any(i =>
             i.FullyQualifiedName == r.FullyQualifiedName ||
             (i.FullyQualifiedName == i.GenericTypeName && i.GenericTypeName == r.GenericTypeName)
             )).ToList();

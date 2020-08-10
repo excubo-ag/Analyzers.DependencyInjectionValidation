@@ -11,7 +11,7 @@ namespace DependencyInjectionValidation
         internal List<Interface> ExplicitelyInjectedInterfaces { get; set; }
         internal List<Interface> ExplicitelyIgnoredInterfaces { get; set; }
         internal List<Interface> RecursivelyDiscoveredInterfaces { get; set; }
-        internal IEnumerable<Interface> AddedInterfaces => 
+        internal IEnumerable<Interface> AddedInterfaces =>
             ExplicitelyInjectedInterfaces == null || RecursivelyDiscoveredInterfaces == null || AlwaysAvailableInterfaces == null || ExplicitelyIgnoredInterfaces == null
             ? null
             : AlwaysAvailableInterfaces.Concat(ExplicitelyInjectedInterfaces).Concat(ExplicitelyIgnoredInterfaces).Concat(RecursivelyDiscoveredInterfaces).Where(i => i != null);
