@@ -7,7 +7,7 @@ The analysis is performed using class and method attributes. Using it requires t
 # Installation
 
 Excubo.Analyzers.DependencyInjectionValidation is distributed via [via nuget.org](https://www.nuget.org/packages/Excubo.Analyzers.DependencyInjectionValidation/).
-![Nuget](https://img.shields.io/nuget/v/Excubo.Analyzers.DependencyInjectionValidation)
+[![Nuget](https://img.shields.io/nuget/v/Excubo.Analyzers.DependencyInjectionValidation)](https://www.nuget.org/packages/Excubo.Analyzers.DependencyInjectionValidation/)
 
 #### Package Manager:
 ```ps
