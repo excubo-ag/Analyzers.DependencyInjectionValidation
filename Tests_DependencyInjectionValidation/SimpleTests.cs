@@ -14,6 +14,7 @@ namespace DependencyInjectionValidation.Test
         [DataTestMethod]
         [DataRow("Empty")]
         [DataRow("DependingOnServiceInInternalConstructor")]
+        [DataRow("DependingOnServiceTInInternalConstructor")]
         [DataRow("DependingOnServiceInInternalConstructor_Ignore")]
         [DataRow("DependingOnServiceInPrivateConstructor")]
         [DataRow("DependingOnServiceInPrivateConstructor_U1U2")]
