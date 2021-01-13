@@ -1,7 +1,4 @@
 <Project>
-  <PropertyGroup>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-  </PropertyGroup>
   <!--Important: this is only a dev dependency, it won't be recursive-->
   <PropertyGroup>
     <DevelopmentDependency>true</DevelopmentDependency>
