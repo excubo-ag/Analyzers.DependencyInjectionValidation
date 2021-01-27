@@ -10,7 +10,7 @@ namespace DependencyInjectionValidation.Test
     [TestClass]
     public class FullyQualifiedTypeNamesTests : CodeFixVerifier
     {
-        private const string path_prefix = "../../../TestCases/FQ";
+        private static string path_prefix = FindPathPrefix("FQ");
         [DataTestMethod]
         [DataRow("Empty")]
         [DataRow("DependingOnServiceInInternalConstructor")]

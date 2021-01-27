@@ -15,6 +15,15 @@ namespace TestHelper
     /// </summary>
     public abstract partial class CodeFixVerifier : DiagnosticVerifier
     {
+        protected static string FindPathPrefix(string directory)
+        {
+            var path = Directory.GetCurrentDirectory();
+            while (!Directory.GetDirectories(path).Any(d => d.EndsWith("TestCases")))
+            {
+                path = Directory.GetParent(path).FullName;
+            }
+            return Path.Combine(path, "TestCases", directory);
+        }
         protected IEnumerable<string> GetAllFilenames(string dir)
         {
             return Directory.GetDirectories(dir).SelectMany(subdir => GetAllFilenames(subdir)).Concat(Directory.GetFiles(dir).Where(f => f.EndsWith(".cs")));

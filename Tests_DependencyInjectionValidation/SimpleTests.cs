@@ -10,7 +10,7 @@ namespace DependencyInjectionValidation.Test
     [TestClass]
     public class SimpleTests : CodeFixVerifier
     {
-        private const string path_prefix = "../../../TestCases/Simple";
+        private static string path_prefix = FindPathPrefix("Simple");
         [DataTestMethod]
         [DataRow("Empty")]
         [DataRow("DependingOnServiceInInternalConstructor")]

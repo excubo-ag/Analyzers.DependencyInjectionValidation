@@ -10,7 +10,7 @@ namespace DependencyInjectionValidation.Test
     [TestClass]
     public class ApplicationTests : CodeFixVerifier
     {
-        private const string path_prefix = "../../../TestCases/App";
+        private static string path_prefix = FindPathPrefix("App");
         [DataTestMethod]
         [DataRow("DependencyExternal")]
         public void NoDiagnostic(string folder_name)

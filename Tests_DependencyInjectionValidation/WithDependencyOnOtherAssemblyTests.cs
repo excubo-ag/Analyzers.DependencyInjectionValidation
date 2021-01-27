@@ -10,7 +10,7 @@ namespace DependencyInjectionValidation.Test
     [TestClass]
     public class WithDependencyOnOtherAssemblyTests : CodeFixVerifier
     {
-        private const string path_prefix = "../../../TestCases/OA";
+        private static string path_prefix = FindPathPrefix("OA");
         [DataTestMethod]
         [DataRow("DependingOnOtherAssembly")]
         [DataRow("DependingOnOtherAssemblyAndImplementingLocal")]
