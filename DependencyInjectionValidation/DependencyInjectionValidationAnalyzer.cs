@@ -47,7 +47,7 @@ namespace DependencyInjectionValidation
                     , TooManyServiceExtensionsRule
                     , MissingDependencyInApplicationRule
                     , FatalErrorRule
-                    //, DebuggingRule
+//, DebuggingRule
 );
             }
         }
@@ -73,7 +73,7 @@ namespace DependencyInjectionValidation
                     Message = e.Message,
                     StackTrace = e.StackTrace
                 };
-                var exception_data_b64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(exception_data));
+                var exception_data_b64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(exception_data)));
                 context.ReportDiagnostic(Diagnostic.Create(FatalErrorRule, null, exception_data_b64));
             }
         }
