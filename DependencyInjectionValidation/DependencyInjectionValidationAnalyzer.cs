@@ -2,9 +2,12 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using System.Text;
+using System.Text.Json;
 
 namespace DependencyInjectionValidation
 {
@@ -31,13 +34,20 @@ namespace DependencyInjectionValidation
         private static readonly DiagnosticDescriptor MissingServiceExtensionRule = new DiagnosticDescriptor("EDI02", MissingServiceExtensionTitle, MissingServiceExtensionMessageFormat, Category, DiagnosticSeverity.Warning, isEnabledByDefault: true, description: MissingServiceExtensionDescription);
         private static readonly DiagnosticDescriptor MissingDependencyRule = new DiagnosticDescriptor("EDI03", MissingDependencyTitle, MissingDependencyMessageFormat, Category, DiagnosticSeverity.Warning, isEnabledByDefault: true, description: MissingDependencyDescription);
         private static readonly DiagnosticDescriptor MissingDependencyInApplicationRule = new DiagnosticDescriptor("EDI04", MissingDependencyInApplicationTitle, MissingDependencyInApplicationMessageFormat, Category, DiagnosticSeverity.Warning, isEnabledByDefault: true, description: MissingDependencyInApplicationDescription);
+
+        private static readonly DiagnosticDescriptor FatalErrorRule = new DiagnosticDescriptor("AD0001+", "Analyzer 'DependencyInjectionValidationAnalyzer' encountered an exception", "This data might be helpful to the developer: {0}", "Analyzer", DiagnosticSeverity.Warning, isEnabledByDefault: true, description: "Developers aren't perfect and there was an unexpected situation. Please consider sending the exception message to them");
         //private static readonly DiagnosticDescriptor DebuggingRule = new DiagnosticDescriptor("INTERNAL", "DEBUGGING", "{0}", Category, DiagnosticSeverity.Warning, isEnabledByDefault: true, description: "");
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics
         {
             get
             {
-                return ImmutableArray.Create(MissingServiceExtensionRule, MissingDependencyRule, TooManyServiceExtensionsRule, MissingDependencyInApplicationRule
-//    , DebuggingRule
+                return ImmutableArray.Create(
+                    MissingServiceExtensionRule
+                    , MissingDependencyRule
+                    , TooManyServiceExtensionsRule
+                    , MissingDependencyInApplicationRule
+                    , FatalErrorRule
+                    //, DebuggingRule
 );
             }
         }
@@ -48,7 +58,27 @@ namespace DependencyInjectionValidation
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);
             context.RegisterCompilationAction(CompilationDoneAction);
         }
+
         private void CompilationDoneAction(CompilationAnalysisContext context)
+        {
+            try
+            {
+                CompilationDoneActionImpl(context);
+            }
+            catch (Exception e)
+            {
+                var exception_data = new
+                {
+                    Type = e.GetType().ToString(),
+                    Message = e.Message,
+                    StackTrace = e.StackTrace
+                };
+                var exception_data_b64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(exception_data));
+                context.ReportDiagnostic(Diagnostic.Create(FatalErrorRule, null, exception_data_b64));
+            }
+        }
+
+        private void CompilationDoneActionImpl(CompilationAnalysisContext context)
         {
             var all_interfaces = context
                 .Compilation
