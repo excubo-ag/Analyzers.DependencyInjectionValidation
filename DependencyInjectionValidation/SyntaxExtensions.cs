@@ -70,10 +70,16 @@ namespace DependencyInjectionValidation
                     return qns.Right.GetGenericTypeArgumentCount();
                 case PredefinedTypeSyntax _:
                     return 0;
-                case TupleTypeSyntax tts:
+                case TupleTypeSyntax _:
                     return 0;
+                case ArrayTypeSyntax ats:
+                    return ats.ElementType.GetGenericTypeArgumentCount();
+                case NullableTypeSyntax nts:
+                    return nts.ElementType.GetGenericTypeArgumentCount();
+                case PointerTypeSyntax pts:
+                    return pts.ElementType.GetGenericTypeArgumentCount();
                 default:
-                    throw new NotSupportedException();
+                    throw new NotSupportedException($"{name_syntax.GetType()} not implemented");
             }
         }
         public static List<string> GetCandidateNamespaces(this TypeSyntax type_syntax)
