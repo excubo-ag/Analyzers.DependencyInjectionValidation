@@ -54,8 +54,14 @@ namespace DependencyInjectionValidation
                     return pts.ToString();
                 case TupleTypeSyntax tts:
                     return tts.ToString();
+                case ArrayTypeSyntax ats:
+                    return ats.ElementType.GetNameWithEmptyTypeParameters();
+                case NullableTypeSyntax nts:
+                    return nts.ElementType.GetNameWithEmptyTypeParameters();
+                case PointerTypeSyntax pts:
+                    return pts.ElementType.GetNameWithEmptyTypeParameters();
                 default:
-                    throw new NotSupportedException();
+                    throw new NotSupportedException($"{name_syntax.GetType()} not implemented");
             }
         }
         public static int GetGenericTypeArgumentCount(this TypeSyntax name_syntax)
