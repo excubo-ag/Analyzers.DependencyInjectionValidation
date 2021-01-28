@@ -43,7 +43,7 @@ namespace Types
     }
     public static class ServiceExtension
     {
-        [Exposes(typeof(DependingOnServiceInInternalConstructor)), As(typeof(IPublicUse1))]
+        [Exposes(typeof(DependingOnServiceInInternalConstructor)), As(typeof(IPublicUse1)), IgnoreDependency(typeof(A), typeof(B))]
         public static IServiceCollection AddService(this IServiceCollection services)
         {
             return services
