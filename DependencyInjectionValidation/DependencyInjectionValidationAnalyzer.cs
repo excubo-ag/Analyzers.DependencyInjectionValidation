@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
-using System.Text.Json;
 
 namespace DependencyInjectionValidation
 {
@@ -67,13 +66,12 @@ namespace DependencyInjectionValidation
             }
             catch (Exception e)
             {
-                var exception_data = new
-                {
-                    Type = e.GetType().ToString(),
-                    Message = e.Message,
-                    StackTrace = e.StackTrace
-                };
-                var exception_data_b64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(exception_data)));
+                var exception_data = string.Join("\n",
+                    "Type: ", e.GetType().ToString(),
+                    "Message: ", e.Message,
+                    "StackTrace: ", e.StackTrace
+                );
+                var exception_data_b64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(exception_data));
                 context.ReportDiagnostic(Diagnostic.Create(FatalErrorRule, null, exception_data_b64));
             }
         }
