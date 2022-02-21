@@ -24,7 +24,7 @@
   <!--PackageId, Version-->
   <PropertyGroup>
     <PackageId>Excubo.Analyzers.DependencyInjectionValidation</PackageId>
-    <Version>1.0.20</Version>
+    <Version>1.0.21</Version>
   </PropertyGroup>
   <!--Self Include-->
   <ItemGroup>
